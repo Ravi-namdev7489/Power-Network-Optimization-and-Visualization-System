@@ -7,8 +7,7 @@ admin_bp = Blueprint('admin', __name__)
 @admin_bp.route('/admin', methods=['POST', 'GET'])
 def admin_dashboard():
     login_required
-    if current_user.id==20:
-       
+    if current_user.id==5:
         users = Signupuser.query.all()
         return render_template('admin_dashboard.html', users=users)
     return render_template("404.html")

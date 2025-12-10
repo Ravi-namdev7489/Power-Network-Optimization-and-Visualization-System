@@ -1,0 +1,46 @@
+
+  .carousel-img {
+    height: 75vh;
+    object-fit: cover;
+    filter: brightness(0.7);
+  }
+
+  .carousel-caption {
+    top: 50%;
+    transform: translateY(-50%);
+    bottom: auto;
+  }
+
+  .carousel-caption h1, .carousel-caption p {
+    text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.7);
+  }
+
+  .hover-shadow-lg:hover {
+    transform: translateY(-5px);
+    transition: 0.4s ease;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2) !important;
+  }
+
+  .btn-animated {
+    transition: all 0.3s ease-in-out;
+  }
+
+  .btn-animated:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  @media (max-width: 768px) {
+    .carousel-img {
+      height: 50vh;
+    }
+
+    .carousel-caption h1 {
+      font-size: 1.75rem;
+    }
+
+    .carousel-caption .btn {
+      font-size: 1rem;
+      padding: 0.6rem 1.2rem;
+    }
+  }
