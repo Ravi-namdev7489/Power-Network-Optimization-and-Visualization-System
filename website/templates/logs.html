@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Bar Plot{% endblock %}
+
+{% block css %}
+<style>
+    .plot-container {
+        margin-top: 20px;
+    }
+    .card {
+        margin-bottom: 30px;
+        border: 1px solid #dee2e6;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    .card-header {
+        background-color: #f8f9fa;
+        font-weight: bold;
+    }
+    h2 {
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">📁 Your Bar Plot Logs</h2>
+
+    {% if results %}
+        {% for result in results %}
+            <div class="card">
+                <div class="card-header">
+                    📅 {{ result.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}
+                </div>
+                <div class="card-body">
+                    <p><strong>📂 Input Params:</strong> {{ result.input_params }}</p>
+                    <p><strong>⚡ Output:</strong> {{ result.output_params }}</p>
+                    <div class="plot-container">
+                        {{ result.plot_data | safe }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-info text-center" role="alert">
+            No bar plot logs found. Run the optimization and generate a plot to view logs here.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

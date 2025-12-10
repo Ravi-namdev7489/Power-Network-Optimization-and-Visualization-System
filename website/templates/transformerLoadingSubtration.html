@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Transformer Loading by Substation
+{% endblock title %}
+
+{% block body %}
+<style>
+  body {
+    background-color: #eef2f7;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .card {
+    border-radius: 1rem;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+  }
+
+  .form-control {
+    border-radius: 0.5rem;
+  }
+
+  .btn-lg {
+    padding: 0.75rem 2rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+
+  .form-label {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .card-title {
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  .btn-modern {
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .btn-modern:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  }
+
+  .alert-danger {
+    font-size: 1.05rem;
+  }
+
+  code {
+    background-color: #f1f1f1;
+    padding: 2px 6px;
+    border-radius: 0.3rem;
+  }
+</style>
+
+<div class="container mt-5 mb-5">
+  <div class="card">
+    <div class="card-body p-4">
+      <h2 class="card-title text-center text-primary mb-4">
+        🔍 Transformer Loading by Substation
+      </h2>
+
+      <!-- Search Form -->
+      <form method="post" action="/transformer-loading-all-snapshots" class="needs-validation" novalidate>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="substation_keyword" class="form-label">
+              Substation Name <span class="text-danger">*</span>
+            </label>
+            <input type="text" class="form-control" id="substation_keyword" name="substation_keyword"
+              placeholder="e.g., Anjuna" required>
+            <div class="invalid-feedback">
+              Please provide a substation name.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="feeder_keyword" class="form-label">
+              Feeder Name <span class="text-muted">(optional)</span>
+            </label>
+            <input type="text" class="form-control" id="feeder_keyword" name="feeder_keyword"
+              placeholder="e.g., Feeder-1">
+            <div class="form-text">Leave blank to include all feeders for the substation.</div>
+          </div>
+        </div>
+
+        <div class="text-center mt-4">
+          <button type="submit" class="btn btn-primary btn-lg">
+            🔎 Search
+          </button>
+        </div>
+      </form>
+
+      <!-- Reset Button -->
+      <form method="post" action="/reset_transformer_loading" class="text-center mt-3">
+        <button type="submit" class="btn btn-warning btn-modern">
+          🔁 Reset All Transformer Loading Data
+        </button>
+      </form>
+
+      <!-- Error Display -->
+      {% if error %}
+      <div class="alert alert-danger text-center mt-4">
+        {{ error }}
+      </div>
+      {% endif %}
+
+      <!-- Plot -->
+      {% if plot_html %}
+      <h4 class="text-success text-center fw-bold mt-5 mb-3">
+        📊 Transformer Loading Over Time
+      </h4>
+      <div class="mt-4">
+        {{ plot_html | safe }}
+      </div>
+      <p class="text-center text-muted mt-3">
+        Multiple lines represent different <code>p_nom</code> versions in <strong>generators.csv</strong>.
+      </p>
+      {% endif %}
+
+      <!-- Navigation Buttons -->
+      <div class="text-center mt-5">
+        <a href="/transformer-loading-all-snapshots" class="btn btn-outline-secondary btn-modern me-2">
+          ⬅️ New Search
+        </a>
+        <a href="/result" class="btn btn-outline-success btn-modern me-2">
+          📈 Show Results
+        </a>
+        <a href="/folder1" class="btn btn-outline-info btn-modern">
+          📁 Back to Folder Upload
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap Validation Script -->
+<script>
+  (() => {
+    'use strict';
+    const forms = document.querySelectorAll('.needs-validation');
+    forms.forEach(form => {
+      form.addEventListener('submit', event => {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      });
+    });
+  })();
+</script>
+{% endblock body %}

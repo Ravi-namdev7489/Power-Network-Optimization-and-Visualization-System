@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Home 
+{% endblock title %}
+
+{% block body %}
+<div class="container">
+    <h2>📈 Unstacked Area Plot</h2>
+
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% elif plot_div %}
+        <div style="margin-bottom: 20px;">
+            <strong>🔢 Total Power Output:</strong> {{ total_power }} MW
+        </div>
+        {{ plot_div | safe }}
+    {% else %}
+        <p>⚠️ No plot available.</p>
+    {% endif %}
+</div>
+    <section class="container mt-5">
+        <form>
+            <div class="row">
+            <a href="/result" class="btn btn-success btn-lg btn-block"><i class="fa-solid fa-chart-line me-2"></i> Show Result</a>
+        </div>
+        </form>
+    </section>
+{% endblock body %}

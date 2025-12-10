@@ -1,0 +1,96 @@
+/* Base layout */
+body {
+  background: linear-gradient(135deg, hsl(236, 43%, 69%), #7a9544);
+  min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Navbar */
+.navbar {
+  background-color:hsl(160, 23%, 25%);
+}
+.navbar .nav-link,
+.navbar .navbar-brand {
+  color: #fff !important;
+  transition: color 0.3s ease;
+}
+.navbar .nav-link:hover,
+.navbar .navbar-brand:hover {
+  color: #ffc107 !important;
+}
+
+
+/* Dropdowns */
+.dropdown-menu {
+  border-radius: 0.5rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  background-color: #f8f9fa;
+  animation: fadeIn 0.2s ease-in-out;
+}
+.dropdown-item {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.dropdown-item:hover {
+  background-color: #f1f1f1;
+  color: #000;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu > .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -0.3rem;
+  display: none;
+}
+.dropdown-submenu:hover > .dropdown-menu,
+.dropdown-submenu > .dropdown-menu.show {
+  display: block;
+  position: absolute;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 2; transform: translateY(0); }
+}
+
+/* Search and buttons */
+form.d-flex input {
+  border-radius: 20px;
+  padding-left: 1rem;
+}
+.btn-outline-warning {
+  border-radius: 20px;
+}
+
+/* Main */
+main.container-fluid {
+  flex-grow: 1;
+}
+
+/* Footer */
+footer {
+  background-color: #1c1c1c;
+  color: #ffffff;
+  padding: 2rem 0;
+  margin-top: auto;
+}
+footer a {
+  color: #ffffff;
+  text-decoration: none;
+}
+footer a:hover {
+  color: #ffc107;
+}
+footer img {
+  transition: transform 0.5s ease;
+}
+footer img:hover {
+  transform: scale(1.1);
+}
+footer a:hover {
+  text-decoration: underline;
+  color: #ccc;
+}

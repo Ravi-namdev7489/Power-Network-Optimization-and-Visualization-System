@@ -1,0 +1,14 @@
+<h2>Optimization Results by Snapshot Group</h2>
+
+{% for group in results %}
+  <h3>Group {{ group.group }}</h3>
+  <p><strong>Snapshots:</strong> {{ group.snapshots }}</p>
+  <p><strong>Total Cost:</strong> {{ group.cost }}</p>
+  <h4>Generator Output</h4>
+  <ul>
+    {% for gen, value in group.generation.items() %}
+      <li>{{ gen }}: {{ value|round(2) }} MW</li>
+    {% endfor %}
+  </ul>
+  <hr>
+{% endfor %}

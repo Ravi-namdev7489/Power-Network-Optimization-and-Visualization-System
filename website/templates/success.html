@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %}Upload Successful{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+
+      <!-- Success Card -->
+      <div class="card shadow-lg border-0 rounded-4 animate__animated animate__fadeIn">
+        <div class="card-body p-5 text-center">
+
+          <!-- Header -->
+          <h2 class="text-success fw-bold mb-3">
+            ✅ Files Uploaded Successfully!
+          </h2>
+          <p class="text-muted mb-4">
+            Your files are safely uploaded and ready for analysis. You can now view the network map or start optimization below.
+          </p>
+
+          <!-- Flash Messages -->
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ 'danger' if category == 'error' or category == 'danger' else category }} alert-dismissible fade show shadow-sm" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+          {% endwith %}
+
+          <!-- Action Buttons -->
+          <div class="d-flex justify-content-center flex-wrap gap-3 mt-4">
+
+            <!-- Show Map Button -->
+            <form action="/map" method="post" class="d-inline">
+              <button type="submit" class="btn btn-lg btn-outline-primary px-4 py-2 rounded-pill shadow-sm hover-glow">
+                <i class="fas fa-map-marked-alt me-2"></i> Show Map
+              </button>
+            </form>
+
+            <!-- Optimize Button -->
+            <form id="optimize-form" action="/optimize-network" method="post" enctype="multipart/form-data">
+              <button type="submit" class="btn btn-lg btn-warning text-dark px-4 py-2 rounded-pill shadow-sm hover-glow">
+                <i class="fas fa-rocket me-2"></i> Start Optimization
+              </button>
+            </form>
+          </div>
+
+          <!-- Divider -->
+          <hr class="my-5">
+
+          <!-- Tip -->
+          <div class="small text-muted">
+            <i class="fas fa-lightbulb text-warning me-1"></i>
+            Tip: Make sure all CSV data is valid before running optimization for accurate results.
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Optional Glow Animation -->
+<style>
+.hover-glow:hover {
+  box-shadow: 0 0 15px rgba(0, 123, 255, 0.5);
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+</style>
+
+<!-- Animate.css (optional for smooth entry) -->
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+/>
+{% endblock body %}

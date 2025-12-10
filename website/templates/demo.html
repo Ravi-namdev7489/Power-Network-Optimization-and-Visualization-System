@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Energy Modeling Tool</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      min-width: 100px;
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2rem;
+    }
+    .table-actions {
+      margin-bottom: 10px;
+    }
+    td[contenteditable="true"]:focus {
+      outline: 2px solid #007bff;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container my-5">
+    <h2 class="text-center mb-4">🔧 Energy Modeling Tool</h2>
+
+    <!-- File Upload Form -->
+    <form id="upload-form" enctype="multipart/form-data" class="mb-5 row g-3">
+      <div class="col-md-4">
+        <label>Buses</label>
+        <input type="file" class="form-control" id="buses" name="buses">
+      </div>
+      <div class="col-md-4">
+        <label>Lines</label>
+        <input type="file" class="form-control" id="lines" name="lines">
+      </div>
+      <div class="col-md-4">
+        <label>Carriers</label>
+        <input type="file" class="form-control" id="carriers" name="carriers">
+      </div>
+      <div class="col-12 text-center">
+        <button type="submit" class="btn btn-primary">📤 Upload & Edit</button>
+      </div>
+    </form>
+
+    <!-- Editable Tables -->
+    <div id="csv-tables"></div>
+
+    <div class="text-center mb-4">
+      <button id="save-csv" class="btn btn-success">🚀

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}Celestial Earth{% endblock title %}</title>
+
+  <!-- Bootstrap CSS & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+
+  {% block css %}{% endblock css %}
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
+  <div class="container-fluid px-4">
+    <a class="navbar-brand fw-bold" href="/">
+      <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Logo" width="30" height="30" class="d-inline-block align-text-top me-2 rounded-circle">
+      Celestial Earth
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <!-- Left nav -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link active" href="/"><i class="fa-solid fa-house me-1"></i>Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/start-modeling"><i class="fa-solid fa-gears me-1"></i>Start Modeling</a></li>
+
+        <!-- Upload Dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="uploadDropdown" data-bs-toggle="dropdown"><i class="fa-solid fa-upload me-1"></i>Upload Data</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/folder1"><i class="fa-solid fa-folder-open me-1"></i>Upload Folder for Base Line </a></li>
+            <li><a class="dropdown-item" href="/folder1"><i class="fa-solid fa-folder-open me-1"></i>Upload Folder for Scenario </a></li>
+            
+          </ul>
+        </li>
+
+        <!-- Run Model Dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="runModelDropdown" data-bs-toggle="dropdown"><i class="fa-solid fa-play me-1"></i>Run Model</a>
+          <ul class="dropdown-menu">
+            <li>
+              <form action="/map" method="post" class="px-3">
+                <button type="submit" class="dropdown-item"><i class="fa-solid fa-map me-1"></i>Show Map</button>
+              </form>
+            </li>
+            <li><a class="dropdown-item" href="/optimize"><i class="fa-solid fa-bolt me-1"></i>Optimize Network</a></li>
+          </ul>
+        </li>
+
+        <!-- Results Dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="resultsDropdown" data-bs-toggle="dropdown"><i class="fa-solid fa-chart-line me-2"></i>Results</a>
+          <ul class="dropdown-menu">
+            <!-- Nested menus -->
+           <li class="dropdown-submenu dropdown-hover position-relative">
+              <a class="dropdown-item dropdown-toggle" href="#"><i class="fa-solid fa-coins me-1"></i> Network Power Flow</a>
+              <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="/real-power"><i class="fa-solid fa-chart-bar me-1"></i> Real Power Flow (Table wise)</a></li>
+                  <li><a class="dropdown-item" href="/real-power-plot"><i class="fa-solid fa-chart-bar me-1"></i> Real Power Flow (Plot)</a></li>
+                  <li><a class="dropdown-item" href="/reactive-power"><i class="fa-solid fa-layer-group me-1"></i> Reactive Power Flow (Table Wise)</a></li>
+                   <li><a class="dropdown-item" href="/reactive-power-plot"><i class="fa-solid fa-layer-group me-1"></i> Reactive Power Flow (plot)</a></li>
+                  <li><a class="dropdown-item" href="/total"><i class="fa-solid fa-chart-pie me-1"></i> Total Power Flow (Table wise)</a></li>
+                  <li><a class="dropdown-item" href="/total-plot"><i class="fa-solid fa-chart-pie me-1"></i> Total Power Flow (Plot)</a></li>
+              </ul>
+           </li>
+
+            <li class="dropdown-submenu dropdown-hover position-relative">
+              <a class="dropdown-item dropdown-toggle" href="#"><i class="fa-solid fa-battery-half me-1"></i>Loading Percentage</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/line_loading">Line Loading (Table)</a></li>
+                <li><a class="dropdown-item" href="/line_loading_graph">Line Loading Graph</a></li>
+                <li><a class="dropdown-item" href="/transformer-loading">Transformer Loading (Table)</a></li>
+                <li><a class="dropdown-item" href="/transformer-loading-graph">Transformer Loading Graph</a></li>
+                 <li><a class="dropdown-item" href="/transformer-loading-dt-wise">Transformer Loading Dt Wise</a></li>
+              </ul>
+            </li>
+
+            <li class="dropdown-submenu dropdown-hover position-relative">
+              <a class="dropdown-item dropdown-toggle" href="#"><i class="fa-solid fa-bolt me-1"></i>Voltage</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/voltage-magnitude">Voltage Magnitude</a></li>
+                <li><a class="dropdown-item" href="/voltage-magnitude-dt-wise">Voltage Magnitude(Dt Wise)</a></li>
+                <li><a class="dropdown-item" href="/bus-angle">Bus Angle</a></li>
+              </ul>
+            </li>
+
+            <li class="dropdown-submenu dropdown-hover position-relative">
+              <a class="dropdown-item dropdown-toggle" href="#"><i class="fa-solid fa-map-location-dot me-1"></i>Optimized Maps</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/plot-load-distribution">Load Distribution Map</a></li>
+                <li><a class="dropdown-item" href="/line-loading-plot">Line Loading Map</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+
+        <!-- History -->
+        
+      </ul>
+
+      <!-- Right nav -->
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        {% if current_user.is_authenticated %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="authDropdown" data-bs-toggle="dropdown">
+            <i class="fa-solid fa-user-circle me-1"></i> Welcome {{ current_user.name }}
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="/profile"><i class="fa-solid fa-id-badge me-1"></i>Profile</a></li>
+            <li><a class="dropdown-item" href="/logout"><i class="fa-solid fa-right-from-bracket me-1"></i>Logout</a></li>
+          </ul>
+        </li>
+        {% else %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="authDropdown" data-bs-toggle="dropdown">
+            <i class="fa-solid fa-user-lock me-1"></i> Account
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="/login">Login</a></li>
+          </ul>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<main class="container-fluid py-4">
+  {% block body %}{% endblock body %}
+</main>
+
+<!-- Footer -->
+<footer class="bg-dark text-white mt-auto pt-4 pb-3">
+  <div class="container">
+    <div class="row text-center text-md-start">
+      <div class="col-md-6 mb-4">
+        <h5 class="fw-bold">Connect with Us</h5>
+        <ul class="list-unstyled">
+          <li><i class="fas fa-phone-alt me-2"></i>+91 74892 78805</li>
+          <li><a href="https://www.linkedin.com/in/ravi-namdev-203a19280" class="text-white text-decoration-none"><i class="fab fa-linkedin me-2"></i>LinkedIn</a></li>
+          <li><a href="https://www.instagram.com/devloper_ravi" class="text-white text-decoration-none"><i class="fab fa-instagram me-2"></i>Instagram</a></li>
+          <li><a href="/profile" class="text-white text-decoration-none"><i class="fas fa-user me-2"></i>Profile</a></li>
+        </ul>
+      </div>
+      <div class="col-md-6 text-center text-md-end">
+        <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Logo" class="mb-2 rounded-circle shadow" width="60" height="60">
+        <h5 class="fw-bold">Celestial Earth</h5>
+        <small class="text-muted">© 2025 Celestial Earth. All rights reserved.</small>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Optional JS for dropdown submenu hover -->
+<script>
+  document.querySelectorAll('.dropdown-submenu > a').forEach(el => {
+    el.addEventListener('click', function (e) {
+      e.preventDefault();
+      const submenu = this.nextElementSibling;
+      if (submenu) submenu.classList.toggle('show');
+    });
+  });
+</script>
+
+</body>
+</html>

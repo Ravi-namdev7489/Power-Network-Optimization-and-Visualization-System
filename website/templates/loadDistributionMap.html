@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Load Distribution Map{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+  <h1 class="text-center text-primary mb-4">Interactive Load Distribution Map</h1>
+
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% elif folium_map %}
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        {{ folium_map|safe }}
+      </div>
+    </div>
+
+    <!-- ✅ Download Button -->
+    {% if shapefile_url %}
+    <div class="text-center mb-4">
+      <a href="{{ shapefile_url }}" class="btn btn-outline-primary btn-lg rounded-pill shadow-sm" download>
+        ⬇️ Download Load Distribution Shapefile (.zip)
+      </a>
+    </div>
+    {% endif %}
+
+  {% else %}
+    <div class="alert alert-warning">No map data to display.</div>
+  {% endif %}
+
+  <div class="text-center mt-3">
+    <a href="/result" class="btn btn-success btn-lg px-5 shadow-sm">
+      <i class="fa-solid fa-chart-line me-2"></i> Show Result
+    </a>
+  </div>
+</div>
+{% endblock %}

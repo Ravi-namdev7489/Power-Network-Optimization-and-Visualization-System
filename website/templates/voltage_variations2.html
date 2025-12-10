@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}Voltage Variations{% endblock %}
+
+{% block body %}
+<div class="container py-5" style="max-width: 720px;">
+  <h1 class="mb-5 fw-bold text-primary text-center">Voltage Variations Table</h1>
+
+  <!-- Search Form -->
+  <form method="POST" action="bus-feeder-voltage-plot" class="mb-5">
+    <div class="mb-3">
+      <label for="substation_keyword" class="form-label fs-4 fw-semibold">Enter Substation Name</label>
+      <input
+        type="text"
+        id="substation_keyword"
+        name="substation_keyword"
+        class="form-control form-control-lg shadow-sm"
+        placeholder="e.g., Main Substation"
+        required
+        value="{{ keyword or '' }}"
+        autofocus
+      >
+    </div>
+    <div class="d-grid">
+      <button type="submit" class="btn btn-primary btn-lg shadow">Search</button>
+    </div>
+  </form>
+
+  <!-- Error Message -->
+  {% if error %}
+    <div class="alert alert-danger shadow-sm rounded" role="alert">
+      <i class="fa-solid fa-triangle-exclamation me-2"></i>{{ error }}
+    </div>
+  {% endif %}
+
+  <!-- Voltage Plot Image -->
+  {% if plot_img %}
+    <div class="text-center mt-4 mb-5">
+      <h4 class="mb-3 text-secondary fw-semibold">Voltage Plot</h4>
+      <img
+        src="data:image/png;base64,{{ plot_img }}"
+        alt="Voltage Plot"
+        class="img-fluid rounded shadow-lg border border-2 border-light"
+        style="max-height: 480px; object-fit: contain;"
+      >
+    </div>
+  {% endif %}
+</div>
+
+<!-- Show Result Button -->
+<section class="text-center mb-5">
+  <a href="/result" class="btn btn-success btn-lg px-5 shadow">
+    <i class="fa-solid fa-chart-line me-2"></i> Show Result
+  </a>
+</section>
+
+<style>
+  /* Subtle input focus glow */
+  input:focus {
+    box-shadow: 0 0 8px 2px rgba(0, 123, 255, 0.25);
+    border-color: #0d6efd;
+  }
+  /* Button shadow on hover */
+  button.btn-primary:hover {
+    box-shadow: 0 6px 20px rgba(13, 110, 253, 0.4);
+  }
+  a.btn-success:hover {
+    box-shadow: 0 6px 20px rgba(25, 135, 84, 0.5);
+  }
+</style>
+{% endblock %}

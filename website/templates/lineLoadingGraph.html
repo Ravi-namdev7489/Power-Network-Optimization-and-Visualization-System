@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="container mt-4">
+    <h2 class="text-center text-primary">📊 Line Loading Graph</h2>
+
+    {% if error %}
+      <div class="alert alert-danger">{{ error }}</div>
+    {% else %}
+      <div class="text-center">
+        <img src="data:image/png;base64,{{ plot_url }}" class="img-fluid rounded shadow" alt="Line Loading Graph">
+      </div>
+    {% endif %}
+</div>
+{% endblock %}

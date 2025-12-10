@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Bar Plot{% endblock %}
+
+{% block body %}
+<div class="container">
+  <h2 class="text-white mb-4">⚡ Cost-Optimized Power Generation</h2>
+
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% else %}
+    <div class="mb-3 text-white fw-semibold">
+      <p>Total Power Generated: <span class="text-warning">{{ total_power }} MW</span></p>
+    </div>
+    <div>
+      {{ plot_div|safe }}
+    </div>
+  {% endif %}
+</div>
+<section class="container mt-3 mb-4">
+        <form>
+            <div class="row">
+            <a href="/result" class="btn btn-success btn-lg btn-block"><i class="fa-solid fa-chart-line me-2"></i> Show Result</a>
+        </div>
+        </form>
+    </section>
+{% endblock %}

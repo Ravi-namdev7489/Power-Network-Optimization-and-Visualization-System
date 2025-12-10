@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}User Profile{% endblock title %}
+
+{% block body %}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white d-flex align-items-center">
+          <i class="fas fa-user-circle fa-2x me-3"></i>
+          <h4 class="mb-0">User Profile</h4>
+        </div>
+        <div class="card-body">
+          <!-- Example user info, replace with real user data -->
+          <p><strong>Name:</strong> {{ current_user.name }}</p>
+          <p><strong>Email:</strong> {{ current_user.email  }}</p>
+            <p><strong>Id:</strong> {{ current_user.id  }}</p>
+
+
+          <hr>
+
+          
+        </div>
+     <a href="/logout" class="btn btn-danger">
+            <i class="fas fa-sign-out-alt me-2 mt-2"></i> Logout
+          </a>
+
+            <a href="/edit-profile" class="btn btn-outline-primary mt-3">
+                <i class="fas fa-edit me-1"></i> Edit Profile
+            </a>
+
+
+          
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock body %}

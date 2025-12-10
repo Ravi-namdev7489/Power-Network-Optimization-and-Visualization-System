@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% block title %}Voltage Variations{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+  <h1 class="mb-4 text-primary fw-bold text-center">Voltage Variations Table</h1>
+
+  <!-- Search Form -->
+  <form method="POST" action="bus-feeder-voltage1" class="row g-3 align-items-center justify-content-center mb-5">
+
+    <div class="col-md-3 text-end">
+      <label for="substation_keyword" class="form-label fw-semibold fs-5 mb-0">Substation Name:</label>
+    </div>
+    <div class="col-md-6">
+      <input
+        type="text"
+        id="substation_keyword"
+        name="substation_keyword"
+        class="form-control form-control-lg shadow-sm"
+        required
+        placeholder="e.g., Substation-1"
+        value="{{ keyword or '' }}"
+        autofocus
+      >
+    </div>
+
+    <div class="col-md-3"></div> <!-- Spacer -->
+
+    <div class="col-md-3 text-end">
+      <label for="time_slot" class="form-label fw-semibold fs-5 mb-0">Time Slot:</label>
+    </div>
+    <div class="col-md-6">
+      <input
+        type="text"
+        id="time_slot"
+        name="time_slot"
+        class="form-control form-control-lg shadow-sm"
+        required
+        placeholder="YYYY-MM-DD HH:MM:SS"
+        value="{{ selected_time or '' }}"
+      >
+    </div>
+
+    <div class="col-md-3 d-grid">
+      <button type="submit" class="btn btn-primary btn-lg shadow-sm">
+        <i class="fa-solid fa-magnifying-glass me-2"></i> Search
+      </button>
+    </div>
+  </form>
+
+  {% if error %}
+    <div class="alert alert-danger shadow-sm rounded" role="alert">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ error }}
+    </div>
+  {% endif %}
+  {% if keyword and not snapshot_rows %}
+    <div class="alert alert-warning shadow-sm rounded" role="alert">
+      <i class="bi bi-info-circle-fill me-2"></i> No voltage data found for substation <strong>"{{ keyword }}"</strong>.
+    </div>
+  {% endif %}
+
+  {% if keyword and snapshot_rows %}
+    <h2 class="mb-4 text-secondary text-center">
+      Results for Substation: <span class="text-primary">"{{ keyword }}"</span>
+      {% if selected_time %}
+        at <span class="text-success">{{ selected_time }}</span>
+      {% endif %}
+    </h2>
+  {% endif %}
+
+  {% if column_labels and snapshot_rows %}
+  <div class="table-responsive shadow rounded" style="max-height: 550px; overflow-y: auto;">
+    <table class="table table-bordered table-striped align-middle table-hover text-center mb-0" style="min-width: 700px;">
+      <thead class="table-dark position-sticky top-0">
+        <tr>
+          <th scope="col" style="min-width: 140px;">Snapshot</th>
+          {% for col in column_labels %}
+            <th scope="col" style="min-width: 120px;">{{ col }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in snapshot_rows %}
+        <tr>
+          <td class="fw-semibold">{{ row.snapshot }}</td>
+          {% for voltage in row.voltages %}
+            <td>{{ voltage }}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+  <section class="mt-5 text-center">
+    <a href="/result" class="btn btn-success btn-lg px-5 shadow-sm">
+      <i class="fa-solid fa-chart-line me-2"></i> Show Result
+    </a>
+  </section>
+</div>
+
+<!-- Flatpickr Scripts -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+  flatpickr("#time_slot", {
+    enableTime: true,
+    enableSeconds: true,
+    dateFormat: "Y-m-d H:i:S",
+    time_24hr: true,
+    defaultHour: 12,
+    defaultMinute: 0
+  });
+</script>
+
+<style>
+  thead.table-dark {
+    box-shadow: 0 3px 5px -3px rgba(0,0,0,0.4);
+    z-index: 10;
+  }
+  tbody tr:hover {
+    background-color: #e9f5ff;
+    transition: background-color 0.3s ease;
+  }
+  input.form-control:focus {
+    box-shadow: 0 0 8px 2px rgba(13, 110, 253, 0.3);
+    border-color: #0d6efd;
+  }
+  button.btn-primary:hover {
+    box-shadow: 0 6px 20px rgba(13, 110, 253, 0.4);
+  }
+  a.btn-success:hover {
+    box-shadow: 0 6px 20px rgba(25, 135, 84, 0.5);
+  }
+</style>
+{% endblock %}

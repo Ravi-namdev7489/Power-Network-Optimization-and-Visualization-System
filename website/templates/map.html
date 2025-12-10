@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Map
+{% endblock title %}
+
+{% block body %}
+
+<div class="container py-5">
+  <!-- Title -->
+  <div class="text-center mb-5">
+    <h2 class="text-primary fw-bold">
+      <i class="fas fa-bolt me-2"></i> Present Electrical Network Map
+    </h2>
+  </div>
+
+  <!-- Result Text -->
+  {% if result_text %}
+    <div class="alert alert-info text-center fs-5 me-4">
+      {{ result_text }}
+    <a href="/folder1" class="btn btn-outline-primary btn-lg me-3">
+        <i class="fas fa-folder-open me-1"></i> Upload Folder
+      </a>
+    </div>
+  {% endif %}
+
+  <!-- Folium Map -->
+  {% if map_html %}
+    <div class="card shadow-sm mb-5">
+      <div class="card-body p-0">
+        <div id="map" style="height: 600px;">{{ map_html|safe }}</div>
+      </div>
+    </div>
+  {% endif %}
+</div>
+
+<!-- Actions Section -->
+<div class="container text-center my-5">
+  <div class="card shadow-sm border-0">
+    <div class="card-body py-5">
+      <h3 class="mb-3">Modeling Your Power Network</h3>
+      <a href="/optimize" class="btn btn-warning btn-lg">
+        <i class="fas fa-rocket me-1"></i> Optimize Network
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Optional JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock body %}

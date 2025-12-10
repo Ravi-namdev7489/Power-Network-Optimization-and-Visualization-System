@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}Upload Files{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title text-center mb-4">Upload CSV Files Individually</h3>
+
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ 'danger' if category == 'danger' else 'success' }}" role="alert">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <form method="POST" enctype="multipart/form-data" action="/upload-files" onsubmit="return validateCSVFiles();">
+                        {% for name in [
+                            'buses.csv', 'lines.csv', 'carriers.csv', 'loads.csv',
+                            'loads-p_set.csv', 'loads-q_set.csv', 'transformers.csv',
+                            'transformer_types.csv', 'generators.csv',
+                            'generators-p_max_pu.csv', 'snapshots.csv'
+                        ] %}
+                            <div class="mb-3">
+                                <label class="form-label">{{ name }}</label>
+                                <input type="file" class="form-control" name="{{ name }}" data-filename="{{ name }}" required>
+                            </div>
+                        {% endfor %}
+
+                        <button type="submit" class="btn btn-primary w-100">Upload Files</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function validateCSVFiles() {
+        const fileInputs = document.querySelectorAll('input[type="file"]');
+        for (const input of fileInputs) {
+            const expectedName = input.dataset.filename;
+            const file = input.files[0];
+
+            if (!file) {
+                alert(`Please upload the file: ${expectedName}`);
+                return false;
+            }
+
+            const actualName = file.name;
+
+            if (actualName !== expectedName) {
+                alert(`⚠️ Expected "${expectedName}", but got "${actualName}". Please upload the correct file.`);
+                return false;
+            }
+
+            if (!actualName.endsWith('.csv')) {
+                alert(`🚫 ${actualName} is not a valid CSV file.`);
+                return false;
+            }
+        }
+        return true;
+    }
+</script>
+{% endblock %}

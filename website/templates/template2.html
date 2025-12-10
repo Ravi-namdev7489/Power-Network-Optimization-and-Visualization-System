@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Energy Modeling Tool</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='uploadFolder.css') }}">
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+  <div class="container my-5">
+    <div class="d-flex justify-content-center mb-4">
+      <button class="btn btn-outline-primary" onclick="dropdown()">⚙️ Modeling</button>
+    </div>
+
+     <div id="dropdown-content" class="mb-4" style="display: none;">
+      <div class="card">
+        <div class="card-body">
+          <a href="#" class="btn btn-outline-info my-2" onclick="dropdown1()">📊 Present Network Status ▼</a>
+
+          <div id="nested-dropdown-content" style="display: none;">
+            <a href="#" class="btn btn--outline-info ps-4" onclick="drop()">📁 Upload folder Data ▼</a>
+              <div id="nested-input-folder"style="display:none;">
+                 <h3 class="mt-2"style="text-align:center;">Upload Folder Data</h3>
+                <div class="row justify-content-center">
+                    <div class="col-md-6 ">
+                        <input type="file" id="folderInput1" webkitdirectory directory multiple class="form-control mb-3">
+                    </div>
+                </div>
+                 <h4 style="text-align: center;">Edit CSV Data</h4>
+                 <div id="fileTables" style="height:15cm;overflow:auto;background-color:lightgray;"></div>
+                 
+             
+               <div class="text-center">
+                 <button id="runModelBtn" class="btn btn-success mt-4">🚀 Run Model</button>
+                </div>
+                 <div id="result" class="mt-5">
+                   <!-- Map and Optimization result shown here -->
+                 </div>
+              
+              <!-- Navigation -->
+              <div class="mt-5 d-flex justify-content-between">
+                <a href="/" class="btn btn-outline-secondary">🏠 Home</a>
+              </div>
+            </div>
+           
+            <a href="#" class="btn btn--outline-info ps-4" onclick="drop1()">📁 Upload files Data ▼</a>
+              <div id="nested-input-file" style="display: none;">
+                <h4 class="mt-4">Upload CSV Files</h4>
+                <!-- CSV Input Fields -->
+                <form id="upload-form" enctype="multipart/form-data" class="row g-3">
+                  <div class="col-md-4">
+                    <label>Buses</label>
+                    <input type="file" class="form-control" id="buses" name="buses">
+                  </div>
+                  <div class="col-md-4">
+                    <label>Lines</label>
+                    <input type="file" class="form-control" id="lines" name="lines">
+                  </div>
+                  <div class="col-md-4">
+                    <label>Carriers</label>
+                    <input type="file" class="form-control" id="carriers" name="carriers">
+                  </div>
+                  <div class="col-md-4">
+                    <label>Generators</label>
+                    <input type="file" class="form-control" id="generators" name="generators">
+                  </div>
+                  <div class="col-md-4">
+                    <label>Snapshots</label>
+                    <input type="file" class="form-control" id="snapshots" name="snapshots">
+                  </div>
+                  <div class="col-md-4">
+                    <label>Loads</label>
+                    <input type="file" class="form-control" id="loads" name="loads">
+                  </div>
+                  <div class="col-md-4">
+                    <label>Storage Units</label>
+                    <input type="file" class="form-control" id="storage_units" name="storage_units">
+                  </div>
+                  <div class="col-md-4">
+                    <label>Transformers</label>
+                    <input type="file" class="form-control" id="transformers" name="transformers">
+                  </div>
+                  <div class="col-md-4">
+                    <label>Transformer Types</label>
+                    <input type="file" class="form-control" id="transformer_types" name="transformer_types">
+                  </div>
+                  
+                  <div class="col-12 text-center mb-3">
+                    <button type="submit" class="btn btn-bg btn-primary  btn-bg">Load CSV Files</button>
+                  </div>
+                </form>
+              
+
+              <!-- CSV Display + Run -->
+              <h4>Edit CSV Data</h4>
+              <div id="csv-tables" style="height:15cm;overflow:auto;"></div>
+          
+              <div class="text-center">
+                <button id="save-csv" class="btn btn-success">🚀 Run Model</button>
+              </div>
+              <hr class="my-4">
+
+              <div id="message-container" class="mt-4 alert alert-info text-center" >
+                <button class="btn btn-primary" type="button" disabled>
+                <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                <span class="visually-hidden">Loading...</span>
+                </button>
+              <button class="btn btn-primary" type="button" disabled>
+                <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                Loading...
+              </button></div>
+              <div id="map-container" class="my-3"></div>
+
+              <!-- Navigation -->
+              <div class="mt-5 d-flex justify-content-between">
+                <a href="/" class="btn btn-outline-secondary">🏠 Home</a>
+                <a href="/login" class="btn btn-outline-dark">⬅️ Previous</a>
+              </div>
+          </div>
+        </div>
+
+            <div class="mt-4 ps-3">
+              <a href="#" class="btn btn-outline-info me-4">📈 Demand Profile</a><br><br>
+              <a href="#" class="btn btn-outline-info me-2">🗺️ RE/EV Site Potential</a><br><br>
+              <a href="#" class="btn btn-outline-info me-2">💎 Future Diamond Projection</a><br><br>
+              <a href="#" class="btn btn-outline-info">⚡ Optimal Gen Mix</a>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='MainModelProject.js') }}"></script>
+  
+</body>
+</html>

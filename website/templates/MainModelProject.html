@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dropdown List Example</title>
+    <link rel="stylesheet" href="MainModelProject.css">
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+</head>
+<body>
+
+<div><h1>Tittle for tool</h1></div>
+    <div class="dropdown">
+            <button class="dropdown-btn" onclick="dropdown()">Modling</button> 
+                <div id="dropdown-content" class="dropdown-content">
+                    <a href="#" class="nested-btn" onclick="dropdown1()">Present Network Status ▼</a>
+                        <div id="nested-dropdown-content" class="nested-dropdown-content">
+                           <!-- <input type="file" id="fileInput" style="display: none;" onchange="displayFileName()"> -->
+                           <!--<button class="upload-btn" onclick="document.getElementById('fileInput').click();"> -->
+                                <a href="#"class="input-data" onclick="drop()">Upload Input data ▼</a>
+                                    <div class="nested-input-data"id="nested-input-data">
+                                            <a href="#">Upload Folder </a>
+                                       <!-- Uplod Buses csv,excel-->
+                                       
+                                             <!-- File Upload Input
+                                                <input type="file" id="csvFileInput" accept=".csv"name="files" required>
+                                                <button onclick="uploadCSV()">Upload</button><br></a>
+                                                <form action="/" method="post" enctype="multipart/form-data">
+                                                    <button id="network"onclick="uploadCSVNetwork()">Upload on network </button>
+                                             </form> -->
+
+                                           <!--<input type="file" id="csvFileInput" accept=".csv" required>
+                                            <button onclick="uploadCSV()">Upload</button>
+                                            <h2>Edit CSV</h2>
+                                            <div class="buses"><table id="csvTable" border="1"></table></div>
+                                            <button onclick="saveCSV()">Save & Send to Network </button>
+                                            <br><br>  -->
+
+                                            <a href="#"><h2>Upload CSV Files Manually</h2>  
+                                                <!-- Form for Uploading Buses & Lines CSV -->
+                                                <form id="upload-form" enctype="multipart/form-data" class="file-inputs">
+                                                    <label>Buses:</label><br><input type="file" id="buses" name="buses"><br>
+                                                    <label>Lines:</label><br><input type="file" id="lines" name="lines"><br>
+                                                    <label>Carriers:</label><br><input type="file" id="carriers" name="carriers"><br>
+                                                    <label>Generators:</label><br><input type="file" id="generators" name="generators"><br>
+                                                    <label>Snapshots:</label><br><input type="file" id="snapshots" name="snapshots"><br>
+                                                    <label>Loads:</label><br><input type="file" id="loads" name="loads"><br>
+                                                    <label>Storage Units:</label><br><input type="file" id="storage_units" name="storage_units"><br>
+                                                    <label>Transformers:</label><br><input type="file" id="transformers" name="transformers"><br>
+                                                    <label>Transformer Types:</label><br><input type="file" id="transformer_types" name="transformer_types"><br>
+                                                    <br>
+                                                    <button type="submit">Upload & Edit CSVs</button>
+                                                </form>
+                                            </a>
+                                            
+                                                <hr>
+                                            
+                                                <!-- Editable CSV Tables -->
+                                                <h2>Edit CSV Data</h2>
+                                                <div id="csv-tables"class="buses"></div></a> <br><br>
+                                                <button id="save-csv" >Save Changes & Generate Map</button>
+                                                <hr>
+                                                 <!-- ✅ This will display the generated map -->
+                                                <!-- Section where the map will be displayed -->
+                                                <h2>Generated Network Map</h2>
+                                                <div id="message-container"></div> <!-- ✅ This will display success/error messages -->
+                                                <div id="map-container" class="buses">
+                                                    <p>Upload and edit the CSV files, then generate the map.</p>
+                                                </div>
+                                                <hr>
+                                                <!-- Section where the map will be displayed -->
+                                                
+                                         <br><br>
+                                         <div><a href="/"><button>Home</button></a>
+                                         <a href="login"><button>Previous</button></a></div>
+
+                                    </div>                    
+                     <a href="#">Demand Profile</a>
+                     <a href="#">RE/EV Site Potential</a>
+                     <a href="#">Future Dimond Projection</a>
+                      <a href="#">Optical Gen Mex</a>
+                 
+        </div>
+    </div>
+    <!--  Upload excel in div-->
+   <!--<div id="sheetsContainer" class="sheetsContainer"></div> -->
+
+</body>
+<script src="MainModelProject.js"></script>
+</html>

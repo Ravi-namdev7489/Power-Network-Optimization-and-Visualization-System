@@ -1,0 +1,102 @@
+
+    {% extends "base.html" %}
+    {% block title %}Area Plot {% endblock %}
+
+    {% block css %}
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f0f2f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+        }
+
+        h2 {
+            font-weight: 700;
+            color: #0d6efd;
+        }
+
+        .card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #0d6efd, #4dd0e1);
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 1rem 1.25rem;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+        }
+
+        .card-body {
+            background-color: #fff;
+            padding: 1.5rem;
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+        }
+
+        .plot-container {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #f9fafb;
+            border-radius: 12px;
+            border: 1px solid #e1e4e8;
+            overflow-x: auto;
+        }
+
+        .no-logs {
+            margin-top: 50px;
+        }
+
+        @media (max-width: 576px) {
+            .card-body p {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+    {% endblock %}
+
+    {% block body %}
+
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-5">📈 Area Plot </h2>
+
+        {% if results %}
+            {% for result in results %}
+                <div class="card mb-4">
+                    <div class="card-header">
+                        📅 {{ result.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}
+                    </div>
+                    <div class="card-body">
+                        <p><strong>📂 Input Parameters:</strong><br> {{ result.input_params }}</p>
+                        <p><strong>⚡ Output Summary:</strong><br> {{ result.output_params }}</p>
+                        <div class="plot-container">
+                            {{ result.plot_data | safe }}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-info text-center no-logs" role="alert">
+                🚫 No area plot logs found.<br>🔄 Run an optimization and generate a plot to view History here.
+            </div>
+        {% endif %}
+    </div>
+
+    {% endblock %}
+
+

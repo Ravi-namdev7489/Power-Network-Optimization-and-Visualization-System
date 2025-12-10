@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="container mt-5">
+  <div class="card shadow-lg border-0 rounded-4">
+    <div class="card-header text-center bg-gradient text-white rounded-top-4"
+         style="background: linear-gradient(90deg, #0d6efd, #0dcaf0);">
+      <h4 class="mb-0 fw-bold">Voltage Magnitude (p.u.)</h4>
+    </div>
+
+    <div class="card-body p-0">
+      <!-- Scrollable table container -->
+      <div class="table-responsive" style="max-height: 600px; overflow:auto;">
+        <table class="table table-striped table-hover align-middle mb-0">
+          <thead class="text-white" style="background-color: #0d6efd;">
+            <tr>
+              {% for col in columns %}
+              <th class="text-center px-3 py-2">{{ col }}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in voltage_magnitude %}
+            <tr>
+              {% for col in columns %}
+              <td class="text-center px-3 py-2">
+                {% if row[col] is number %}
+                  {{ "%.3f"|format(row[col]) }}
+                {% else %}
+                  {{ row[col] }}
+                {% endif %}
+              </td>
+              {% endfor %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modern styling -->
+<style>
+  /* Smooth row hover */
+  tbody tr:hover {
+    background-color: #f1f9ff !important;
+    transition: background-color 0.25s ease-in-out;
+  }
+
+  /* Header style */
+  thead th {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+  }
+
+  /* Scrollbar */
+  .table-responsive::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .table-responsive::-webkit-scrollbar-thumb {
+    background: #adb5bd;
+    border-radius: 10px;
+  }
+  .table-responsive::-webkit-scrollbar-track {
+    background: #f8f9fa;
+  }
+</style>
+{% endblock %}

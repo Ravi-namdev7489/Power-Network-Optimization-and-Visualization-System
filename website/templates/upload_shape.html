@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Shapefile{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-center align-items-center" style="min-height:70vh;">
+  <div class="card shadow-lg border-0 rounded-3 p-4" style="max-width: 500px; width:100%;">
+    <div class="card-body">
+      <h3 class="card-title text-center mb-4 text-primary">Upload Shapefile ZIP</h3>
+      <form method="POST" enctype="multipart/form-data">
+        <div class="mb-3">
+          <label for="shapefile" class="form-label fw-semibold">Choose ZIP File</label>
+          <input type="file" id="shapefile" name="shapefile" accept=".zip" class="form-control" required>
+        </div>
+        <div class="d-grid">
+          <button type="submit" class="btn btn-success btn-lg">
+            <i class="bi bi-upload"></i> Upload & Convert
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

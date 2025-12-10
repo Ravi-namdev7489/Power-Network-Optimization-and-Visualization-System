@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Upload Folder
+{% endblock title %}
+
+{% block body %}
+<div class="container mt-4">
+    <h3 class="text-center">Upload Folder Data</h3>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-6">
+            <form action="{{ url_for('upload_folder') }}" method="post" enctype="multipart/form-data">
+                <div class="input-group">
+                    <input type="file" id="folderInput" name="csv_files" webkitdirectory directory multiple class="form-control" required>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <h4 class="text-center">Edit CSV Data</h4>
+    <div id="fileTables" style="height:15cm; overflow:auto; background-color:lightgray;" class="p-3 rounded"></div>
+
+    <div class="row mt-4">
+        <div class="col-12 text-center">
+            <button class="btn btn-success" onclick="saveAllChanges()">Save All Changes</button>
+            <button class="btn btn-primary" onclick="uploadAllChanges()">Upload All Changes</button>
+            <a href="/run" class="btn btn-success m-1">Show Map</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    let fileData = {};
+    const requiredFiles = [
+        'buses.csv', 'lines.csv', 'carriers.csv', 'loads.csv',
+        'loads-p_set.csv', 'loads-q_set.csv', 'transformers.csv',
+        'transformer_types.csv', 'generators.csv',
+        'generators-p_max_pu.csv', 'snapshots.csv'
+    ];
+
+    document.getElementById("folderInput").addEventListener("change", function (event) {
+        const files = Array.from(event.target.files);
+        const tablesDiv = document.getElementById("fileTables");
+        tablesDiv.innerHTML = "";
+        fileData = {};
+
+        files.forEach(file => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const content = e.target.result;
+                    const lines = content.split("\n").map(line => line.split(","));
+                    const tableId = file.name;
+                    fileData[tableId] = lines;
+
+                    const tableContainer = document.createElement("div");
+                    tableContainer.className = "mb-4 p-2 bg-white rounded shadow-sm";
+
+                    const title = document.createElement("h5");
+                    title.textContent = file.name;
+                    tableContainer.appendChild(title);
+
+                    const table = document.createElement("table");
+                    table.id = tableId;
+                    table.className = "table table-sm table-bordered";
+
+                    lines.forEach((row, rowIndex) => {
+                        const tr = document.createElement("tr");
+                        row.forEach((cell, colIndex) => {
+                            const td = document.createElement(rowIndex === 0 ? "th" : "td");
+                            td.contentEditable = rowIndex !== 0;
+                            td.textContent = cell;
+                            tr.appendChild(td);
+                        });
+                        table.appendChild(tr);
+                    });
+
+                    const btnGroup = document.createElement("div");
+                    btnGroup.className = "table-controls text-end mt-2";
+
+                    const actionMap = {
+                        "Insert Row": inserttablerow,
+                        "Delete Row": deletetablerow,
+                        "Insert Column": inserttablecolumn,
+                        "Delete Column": deletetablecolumn
+                    };
+
+                    Object.entries(actionMap).forEach(([label, handler]) => {
+                        const btn = document.createElement("button");
+                        btn.className = "btn btn-outline-secondary btn-sm me-2";
+                        btn.textContent = label;
+                        btn.onclick = () => handler(tableId);
+                        btnGroup.appendChild(btn);
+                    });
+
+                    tableContainer.appendChild(btnGroup);
+                    tableContainer.appendChild(table);
+                    tablesDiv.appendChild(tableContainer);
+                } catch (error) {
+                    console.error("Error reading file: ", file.name, error);
+                }
+            };
+            reader.onerror = function() {
+                console.error("FileReader error for file: ", file.name);
+            };
+            reader.readAsText(file);
+        });
+    });
+
+    function inserttablerow(tableId) {
+        const table = document.getElementById(tableId);
+        const newRow = table.insertRow(-1);
+        const colCount = table.rows[0].cells.length;
+        for (let i = 0; i < colCount; i++) {
+            const newCell = newRow.insertCell(i);
+            newCell.contentEditable = true;
+        }
+    }
+
+    function deletetablerow(tableId) {
+        const table = document.getElementById(tableId);
+        if (table.rows.length > 1) {
+            table.deleteRow(-1);
+        }
+    }
+
+    function inserttablecolumn(tableId) {
+        const table = document.getElementById(tableId);
+        for (let i = 0; i < table.rows.length; i++) {
+            const cell = table.rows[i].insertCell(-1);
+            if (i === 0) {
+                cell.outerHTML = "<th contenteditable='true'>NewCol</th>";
+            } else {
+                cell.contentEditable = true;
+            }
+        }
+    }
+
+    function deletetablecolumn(tableId) {
+        const table = document.getElementById(tableId);
+        const colCount = table.rows[0].cells.length;
+        if (colCount > 1) {
+            for (let i = 0; i < table.rows.length; i++) {
+                table.rows[i].deleteCell(-1);
+            }
+        }
+    }
+
+    function saveAllChanges() {
+        Object.keys(fileData).forEach(fileName => {
+            const table = document.getElementById(fileName);
+            const newData = [];
+            for (let r = 0; r < table.rows.length; r++) {
+                const row = [];
+                for (let c = 0; c < table.rows[r].cells.length; c++) {
+                    row.push(table.rows[r].cells[c].textContent.trim());
+                }
+                newData.push(row);
+            }
+            fileData[fileName] = newData;
+        });
+        alert("✅ All changes saved locally (in memory).");
+    }
+
+    function createFormData() {
+        const formData = new FormData();
+        for (const [fileName, rows] of Object.entries(fileData)) {
+            const csvContent = rows.map(row => row.join(",")).join("\n");
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            formData.append('files', blob, fileName);
+        }
+        return formData;
+    }
+
+    function uploadAllChanges() {
+        saveAllChanges();
+
+        const missing = requiredFiles.filter(name => !(name in fileData));
+        if (missing.length > 0) {
+            alert("❌ Missing required files:\n" + missing.join("\n"));
+            return;
+        }
+
+        fetch("/upload-folder", {
+            method: "POST",
+            body: createFormData()
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.error) {
+                alert("❌ " + data.error);
+            } else {
+                alert(data.message || "✅ Uploaded and processed!");
+                if (data.map_html) {
+                    const mapWindow = window.open();
+                    mapWindow.document.write(data.map_html);
+                }
+            }
+        })
+        .catch(err => alert("❌ Upload failed: " + err.message));
+    }
+</script>
+{% endblock %}

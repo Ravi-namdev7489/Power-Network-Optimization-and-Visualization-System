@@ -1,0 +1,50 @@
+
+  {% extends "base.html" %}
+
+{% block title %}Bar Plot{% endblock %}
+
+{% block body %}
+    <style>
+        
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        img {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 2px 2px 12px rgba(0,0,0,0.1);
+            max-width: 100%;
+            height: auto;
+        }
+        .footer {
+            margin-top: 40px;
+            font-size: 0.9em;
+            color: #777;
+        }
+    </style>
+
+ <div class="container text-center">
+    <h1>Percentage Contribution by Carriers</h1>
+    {% if error %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+{% else %}
+    <img src="data:image/png;base64,{{ pie_chart }}" alt="Pie Chart - Carrier Contribution" />
+    <div class="footer">
+        Data powered by PyPSA & Matplotlib
+    </div>
+    <section class="container mt-3 mb-4 ">
+        <form>
+            {% endif %}
+            <div class="row">
+            <a href="/result" class="btn btn-success btn-lg "><i class="fa-solid fa-chart-line me-2"></i> Show Result</a>
+        </div>
+        </form>
+    </section>
+</div>
+
+{% endblock %}
+

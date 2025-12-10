@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}Line Loading Logs{% endblock title %}
+
+{% block body %}
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .card {
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    .table th, .table td {
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+    .table th {
+        background-color: #343a40;
+        color: white;
+    }
+    .section-title {
+        font-size: 2rem;
+        font-weight: 600;
+    }
+    .overflow-table {
+        max-height: 400px;
+        overflow-x: auto;
+        overflow-y: auto;
+    }
+</style>
+
+{% macro format_two_decimals(value) %}
+    {% set float_val = value|float %}
+    {{ "%.2f"|format(float_val) }}
+{% endmacro %}
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="section-title">📊 Transformer Loading Logs</h2>
+        <p class="text-muted">Review historical line loading results saved from optimizations.</p>
+    </div>
+
+    {% if results %}
+        {% for result in results %}
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <strong>🕒 Saved on:</strong> {{ result.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}
+                </div>
+                <div class="card-body">
+                    <p><strong>📂 Input:</strong> {{ result.input_params }}</p>
+
+                    {% if result.plot_data %}
+                        {% set headers = result.plot_data.splitlines()[0].split(',') %}
+                        {% set max_loading_index = headers.index("Max Loading (%)") %}
+                        <div class="overflow-table table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        {% for header in headers %}
+                                            <th>{{ header }}</th>
+                                        {% endfor %}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for line in result.plot_data.splitlines()[1:] %}
+                                        {% set values = line.split(',') %}
+                                        <tr>
+                                            {% for value in values %}
+                                                {% if loop.index0 == max_loading_index %}
+                                                    <td>{{ format_two_decimals(value) }}</td>
+                                                {% else %}
+                                                    <td>{{ value }}</td>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No data available for this result.</p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-warning text-center">
+            <strong>⚠️ No line loading logs found.</strong> Run an optimization to generate new logs.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Optional JavaScript for future enhancements
+</script>
+{% endblock %}

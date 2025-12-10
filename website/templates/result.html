@@ -1,0 +1,233 @@
+{% extends 'base.html' %}
+
+{% block title %}Results | SPIBEAT{% endblock %}
+
+{% block body %}
+<style>
+  body {
+    background: linear-gradient(135deg, #e8f0ff 0%, #ffffff 100%);
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+  }
+
+  .result-container {
+    max-width: 1200px;
+    margin: 60px auto;
+    padding: 40px 50px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 25px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+    animation: fadeIn 0.8s ease-in-out;
+  }
+
+  .result-header {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #0d6efd;
+    text-align: center;
+    margin-bottom: 40px;
+    letter-spacing: 0.5px;
+  }
+
+  .category-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #1d3557;
+    background: linear-gradient(to right, #eaf2ff, #ffffff);
+    padding: 12px 18px;
+    border-left: 6px solid #0d6efd;
+    border-radius: 8px;
+    margin: 40px 0 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.3s ease;
+  }
+
+  .category-title:hover {
+    background: linear-gradient(to right, #dbe8ff, #ffffff);
+  }
+
+  .btn-modern {
+    padding: 14px 20px;
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 14px;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  }
+
+  .btn-modern:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  }
+
+  .footer-btns {
+    margin-top: 60px;
+    text-align: center;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Color Variants */
+  .btn-primary { background-color: #0d6efd; border: none; }
+  .btn-secondary { background-color: #6c63ff; border: none; }
+  .btn-success { background-color: #28a745; border: none; }
+  .btn-info { background-color: #17a2b8; border: none; }
+
+  .btn-outline-secondary {
+    color: #495057;
+    border: 2px solid #adb5bd;
+    transition: all 0.3s ease;
+  }
+
+  .btn-outline-secondary:hover {
+    background-color: #adb5bd;
+    color: #fff;
+  }
+
+  /* Hover Glow Effect */
+  .btn-modern:hover {
+    box-shadow: 0 0 12px rgba(13, 110, 253, 0.4);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .result-container {
+      padding: 25px 20px;
+    }
+    .result-header {
+      font-size: 1.8rem;
+    }
+  }
+</style>
+
+<div class="container result-container">
+  <div class="result-header">
+    <i class="fa-solid fa-bolt-lightning text-warning me-2"></i> SPIBEAT Modeling Results
+  </div>
+
+  <!-- ⚡ Power Flow Section -->
+  <div class="category-title">
+    <i class="fa-solid fa-chart-line text-primary"></i> Power Flow Analysis
+  </div>
+  <div class="row g-4 justify-content-center">
+    <div class="col-md-5">
+      <a href="/real-power" class="btn btn-primary w-100 btn-modern">
+        <i class="fa-solid fa-table me-2"></i> Real Power Flow (Table)
+      </a>
+    </div>
+    <div class="col-md-5">
+      <a href="/real-power-plot" class="btn btn-primary w-100 btn-modern">
+        <i class="fa-solid fa-chart-area me-2"></i> Real Power Flow (Plot)
+      </a>
+    </div>
+    <div class="col-md-5">
+      <a href="/reactive-power" class="btn btn-secondary w-100 btn-modern">
+        <i class="fa-solid fa-bolt me-2"></i> Reactive Power Flow (Table)
+      </a>
+    </div>
+    <div class="col-md-5">
+      <a href="/reactive-power-plot" class="btn btn-secondary w-100 btn-modern">
+        <i class="fa-solid fa-chart-column me-2"></i> Reactive Power Flow (Plot)
+      </a>
+    </div>
+    <div class="col-md-5">
+      <a href="/total" class="btn btn-secondary w-100 btn-modern">
+        <i class="fa-solid fa-plug-circle-bolt me-2"></i> Total Power Flow (Table)
+      </a>
+    </div>
+    <div class="col-md-5">
+      <a href="/total-plot" class="btn btn-secondary w-100 btn-modern">
+        <i class="fa-solid fa-layer-group me-2"></i> Total Power Flow (Plot)
+      </a>
+    </div>
+  </div>
+
+  <!-- 🔋 Loading & Transformer Section -->
+  <div class="category-title">
+    <i class="fa-solid fa-battery-full text-success"></i> Loading & Transformer Analysis
+  </div>
+  <div class="row g-4 justify-content-center">
+    <div class="col-md-5">
+      <a href="/line_loading" class="btn btn-success w-100 btn-modern">
+        <i class="fa-solid fa-table me-2"></i> Line Loading (Table)
+      </a>
+    </div>
+    <div class="col-md-5">
+      <a href="/line_loading_graph" class="btn btn-success w-100 btn-modern">
+        <i class="fa-solid fa-chart-line me-2"></i> Line Loading Graph
+      </a>
+    </div>
+    <div class="col-md-5">
+      <a href="/transformer-loading" class="btn btn-success w-100 btn-modern">
+        <i class="fa-solid fa-plug-circle-exclamation me-2"></i> Transformer Loading (Table)
+      </a>
+    </div>
+    <div class="col-md-5">
+      <a href="/transformer-loading-graph" class="btn btn-success w-100 btn-modern">
+        <i class="fa-solid fa-chart-bar me-2"></i> Transformer Loading Graph
+      </a>
+    </div>
+    <div class="col-md-5">
+      <a href="/transformer-loading-dt-wise" class="btn btn-success w-100 btn-modern">
+        <i class="fa-solid fa-chart me-2"></i> Transformer Loading (DT Wise)
+      </a>
+    </div>
+  </div>
+
+  <!-- ⚙️ Voltage Section -->
+  <div class="category-title">
+    <i class="fa-solid fa-bolt text-info"></i> Voltage Analysis
+  </div>
+  <div class="row g-4 justify-content-center">
+    <div class="col-md-5">
+      <a href="/voltage-magnitude" class="btn btn-info w-100 btn-modern">
+        <i class="fa-solid fa-wave-square me-2"></i> Voltage Magnitude
+      </a>
+    </div>
+    <div class="col-md-5">
+      <a href="/voltage-magnitude-dt-wise" class="btn btn-info w-100 btn-modern">
+        <i class="fa-solid fa-map-location-dot me-2"></i> Voltage Magnitude (DT Wise)
+      </a>
+    </div>
+    <div class="col-md-5">
+      <a href="/bus-angle" class="btn btn-info w-100 btn-modern">
+        <i class="fa-solid fa-compass-drafting me-2"></i> Bus Angle
+      </a>
+    </div>
+  </div>
+
+  <!-- 🗺️ Map Section -->
+  <div class="category-title">
+    <i class="fa-solid fa-map-location-dot text-primary"></i> Map Visualizations
+  </div>
+  <div class="row g-4 justify-content-center">
+    <div class="col-md-5">
+      <a href="/plot-load-distribution" class="btn btn-secondary w-100 btn-modern">
+        <i class="fa-solid fa-chart-pie me-2"></i> Load Distribution Map
+      </a>
+    </div>
+    <div class="col-md-5">
+      <a href="/line-loading-plot" class="btn btn-secondary w-100 btn-modern">
+        <i class="fa-solid fa-route me-2"></i> Line Loading Map
+      </a>
+    </div>
+  </div>
+
+  <!-- 🔙 Back -->
+  <div class="footer-btns mt-5">
+    <a href="/" class="btn btn-outline-secondary btn-modern">
+      <i class="fa-solid fa-arrow-left me-2"></i> Back to Dashboard
+    </a>
+  </div>
+</div>
+{% endblock %}

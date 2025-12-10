@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4 text-primary fw-bold">
+        ⚡ Real Power Flow (Absolute)
+    </h2>
+
+    <!-- Scrollable container -->
+    <div class="table-responsive shadow rounded-3" 
+         style="max-height: 600px; overflow-x: auto; overflow-y: auto;">
+
+      <table class="table table-striped table-hover align-middle mb-0">
+        <thead class="table-dark sticky-top">
+          <tr>
+            {% for col in columns %}
+            <th class="text-center px-3 py-2">{{ col }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in Power_line %}
+          <tr>
+            {% for col in columns %}
+            <td class="text-center px-3 py-2">
+              {% if row[col] is number %}
+                {{ "%.3f"|format(row[col]) }}
+              {% else %}
+                {{ row[col] }}
+              {% endif %}
+            </td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+</div>
+
+<!-- Custom modern scroll styling -->
+<style>
+  /* Modern scrollbars */
+  .table-responsive::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+  }
+  .table-responsive::-webkit-scrollbar-thumb {
+    background: #6c757d;
+    border-radius: 10px;
+  }
+  .table-responsive::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  /* Row hover with subtle animation */
+  tbody tr:hover {
+    background-color: #e9f5ff !important;
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  /* Table header style */
+  thead th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+</style>
+{% endblock %}

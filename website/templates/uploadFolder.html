@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Upload CSV Folder and Edit</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    #mapContainer {
+      width: 100%;
+      min-height: 600px;
+      margin-top: 20px;
+    }
+    .table-controls {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body class="container py-5">
+  <h1 class="mb-4">Upload and Edit CSV Files</h1>
+
+  <input type="file" id="folderInput" webkitdirectory directory multiple class="form-control mb-3">
+
+  <div id="fileTables"></div>
+
+  <button id="runModelBtn" class="btn btn-primary mt-4">Run Model</button>
+
+  <div id="result" class="mt-5">
+    <!-- Map and Optimization result shown here -->
+  </div>
+
+  <script>
+  const folderInput = document.getElementById('folderInput');
+  const fileTables = {};
+  const runModelBtn = document.getElementById('runModelBtn');
+
+  folderInput.addEventListener('change', async (event) => {
+    const files = event.target.files;
+    const fileMap = {};
+
+    for (const file of files) {
+      if (file.name.endsWith('.csv')) {
+        const content = await file.text();
+        const rows = content.trim().split("\n").map(row => row.split(","));
+        fileMap[file.name.replace(".csv", "")] = rows;
+      }
+    }
+
+    document.getElementById('fileTables').innerHTML = '';
+
+    for (const [name, rows] of Object.entries(fileMap)) {
+      const container = document.createElement('div');
+      container.className = 'mt-4';
+
+      const title = document.createElement('h4');
+      title.textContent = name + '.csv';
+      container.appendChild(title);
+
+      const controls = document.createElement('div');
+      controls.className = 'table-controls mb-2';
+      controls.innerHTML = `
+        <button class="btn btn-sm btn-success add-column">Add Column</button>
+        <button class="btn btn-sm btn-danger delete-column">Delete Column</button>
+      `;
+      container.appendChild(controls);
+
+      const table = document.createElement('table');
+      table.className = 'table table-bordered';
+      table.innerHTML = rows.map((row, idx) => `
+        <tr>
+          ${row.map(cell => `<td contenteditable="true">${cell}</td>`).join('')}
+        </tr>
+      `).join('');
+      container.appendChild(table);
+
+      document.getElementById('fileTables').appendChild(container);
+      fileTables[name] = table;
+
+      controls.querySelector('.add-column').addEventListener('click', () => addColumn(table));
+      controls.querySelector('.delete-column').addEventListener('click', () => deleteColumn(table));
+    }
+  });
+
+  function addColumn(table) {
+    for (let row of table.rows) {
+      const cell = row.insertCell(-1);
+      cell.contentEditable = "true";
+      cell.innerText = "";
+    }
+  }
+
+  function deleteColumn(table) {
+    const colIndex = prompt("Enter column number to delete (starting from 1):");
+    const idx = parseInt(colIndex) - 1;
+    if (isNaN(idx)) return alert('Invalid column number');
+    for (let row of table.rows) {
+      if (row.cells[idx]) {
+        row.deleteCell(idx);
+      }
+    }
+  }
+
+  function tableToCSV(table) {
+    return Array.from(table.rows).map(row => {
+      return Array.from(row.cells).map(cell => `"${cell.innerText.replace(/"/g, '""')}"`).join(",");
+    }).join("\n");
+  }
+
+  runModelBtn.addEventListener('click', async () => {
+    const formData = new FormData();
+    const requiredFiles = ["buses", "lines", "carriers", "generators", "snapshots", "loads", "storage_units", "transformers", "transformer_types"];
+
+    for (const file of requiredFiles) {
+      if (fileTables[file]) {
+        const csvContent = tableToCSV(fileTables[file]);
+        const blob = new Blob([csvContent], { type: 'text/csv' });
+        formData.append(file, blob, file + ".csv");
+      } else {
+        alert(`Missing required file: ${file}.csv`);
+        return;
+      }
+    }
+
+    try {
+      document.getElementById('runModelBtn').disabled = true;
+      document.getElementById('runModelBtn').innerText = 'Running...';
+
+      const response = await fetch('/upload', {
+        method: 'POST',
+        body: formData
+      });
+
+      const result = await response.json();
+
+      document.getElementById('result').innerHTML = `
+        <h3>Optimization Result:</h3>
+        <p>${result.optimization_result}</p>
+        <h3>Network Map:</h3>
+        <div id="mapContainer">${result.map_html}</div>
+      `;
+
+    } catch (error) {
+      alert('Error running model: ' + error.message);
+    } finally {
+      document.getElementById('runModelBtn').disabled = false;
+      document.getElementById('runModelBtn').innerText = 'Run Model';
+    }
+  });
+  </script>
+</body>
+</html>

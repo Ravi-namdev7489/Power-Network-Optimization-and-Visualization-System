@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+
+{% block body %}
+<style>
+  body {
+    background-color: #f5f8fa;
+  }
+
+  .editable-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .editable-table th,
+  .editable-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+  }
+
+  .editable-table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+  }
+
+  .new-row {
+    background-color: #e9f7ef;
+    font-weight: bold;
+    font-size: 1.05em;
+  }
+
+  .table-controls button {
+    font-size: 14px;
+    padding: 6px 12px;
+    margin-bottom: 5px;
+  }
+
+  .insert-btn {
+    background-color: #28a745;
+    color: white;
+  }
+
+  .delete-btn {
+    background-color: #dc3545;
+    color: white;
+  }
+
+  .insert-btn:hover,
+  .delete-btn:hover {
+    opacity: 0.9;
+  }
+
+  .card {
+    border: 1px solid #dee2e6;
+    transition: transform 0.2s ease-in-out;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .required-files {
+    font-size: 0.9rem;
+    font-style: italic;
+    color: #6c757d;
+  }
+
+  .highlight-required {
+    font-weight: 500;
+    color: #dc3545;
+  }
+</style>
+
+<div class="container my-5">
+  <div class="text-center mb-5">
+    <h2 class="fw-bold text-primary animate__animated animate__fadeInDown">
+      <i class="fa-solid fa-folder-open me-2"></i>Upload Folder Data
+    </h2>
+    <p class="required-files">
+      <span class="highlight-required">Required CSV files in the folder:</span>
+      buses.csv, lines.csv, generators.csv, loads.csv, transformers.csv, carriers.csv,
+      snapshots.csv, loads-p_set.csv, loads-q_set.csv, generators-p_max_pu.csv
+    </p>
+  </div>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ 'danger' if category == 'error' or category == 'danger' else category }} alert-dismissible fade show" role="alert">
+        <i class="fa-solid fa-circle-info me-2"></i>{{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endwith %}
+
+  <div class="card shadow-sm mb-4 animate__animated animate__fadeInUp">
+    <div class="card-body text-center">
+      <label for="folderInput" class="form-label fw-semibold mb-2">Select a folder containing all required CSV files:</label>
+      <input type="file" id="folderInput" webkitdirectory directory multiple accept=".csv" class="form-control form-control-lg border-primary" required>
+    </div>
+  </div>
+
+  <div id="fileSelection" class="card shadow-sm mb-4" style="display: none;">
+    <div class="card-body">
+      <h5 class="card-title text-info"><i class="fa-solid fa-check me-2"></i>CSV Files Detected</h5>
+      <form id="fileSelectorForm" class="mb-3 d-flex flex-wrap gap-3"></form>
+      <button type="button" class="btn btn-outline-info btn-sm" onclick="loadSelectedTables()">
+        <i class="fa-solid fa-file-lines me-1"></i> Load Selected Files
+      </button>
+    </div>
+  </div>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h4 class="card-title text-center text-secondary"><i class="fa-solid fa-pen-to-square me-2"></i>Edit CSV Data</h4>
+      <div id="fileTables" class="p-3 bg-light rounded" style="height:15cm; overflow:auto;"></div>
+    </div>
+  </div>
+
+  <div class="text-center mt-4">
+    <button class="btn btn-success me-2" onclick="saveAllChanges()">
+      <i class="fa-solid fa-save me-1"></i> Save All Changes
+    </button>
+    <button class="btn btn-primary me-2" onclick="uploadAllChanges()">
+      <i class="fa-solid fa-cloud-arrow-up me-1"></i> Upload All Changes
+    </button>
+    <button class="btn btn-warning" onclick="reloadFolder()">
+      <i class="fa-solid fa-rotate-right me-1"></i> Reload Previously Uploaded Folder
+    </button>
+  </div>
+
+  <form id="uploadForm" action="/upload-folder" method="POST" enctype="multipart/form-data" style="display:none;"></form>
+</div>
+
+
+<!-- Optional Animation CSS & Scripts -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+<script src="{{ url_for('static', filename='js/folder.js') }}"></script>
+{% endblock %}

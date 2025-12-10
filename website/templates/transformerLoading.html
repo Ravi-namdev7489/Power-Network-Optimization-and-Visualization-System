@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="container mt-4 animate__animated animate__fadeIn">
+  <h1 class="text-center ">Transformer Loading</h1>
+
+  <!-- Card wrapper with glassmorphism -->
+  <div class="card glass-card border-0 rounded-4 shadow-lg">
+    <div class="card-body p-0">
+      <!-- Scrollable container -->
+      <div class="table-responsive" style="max-height: 600px; overflow-x: auto; overflow-y: auto;">
+
+        <table class="table table-hover align-middle mb-0">
+          <thead class="sticky-top">
+            <tr>
+              {% for col in columns %}
+              <th class="text-center px-3 py-3">{{ col }}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in transformer_loading %}
+            <tr>
+              {% for col in columns %}
+              <td class="text-center px-3 py-2">
+                {% if row[col] is number %}
+                  {% set value = "%.2f"|format(row[col]) %}
+                  {% if row[col] > 100 %}
+                    <span class="badge bg-danger px-3 py-2 shadow-sm">{{ value }}</span>
+                  {% elif row[col] > 80 %}
+                    <span class="badge bg-warning text-dark px-3 py-2 shadow-sm">{{ value }}</span>
+                  {% else %}
+                    <span class="badge bg-success px-3 py-2 shadow-sm">{{ value }}</span>
+                  {% endif %}
+                {% else %}
+                  {{ row[col] }}
+                {% endif %}
+              </td>
+              {% endfor %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Custom Styling -->
+<style>
+  /* Gradient heading text */
+  .text-gradient {
+    background: linear-gradient(90deg, #0d6efd, #4dabf7);
+    
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Glassmorphism card */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    border-radius: 1rem;
+  }
+
+  /* Table header */
+  thead th {
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: linear-gradient(90deg, #0d6efd, #4dabf7);
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+
+  /* Row hover glow */
+  tbody tr {
+    transition: all 0.3s ease-in-out;
+  }
+  tbody tr:hover {
+    background-color: rgba(13, 110, 253, 0.05) !important;
+    box-shadow: inset 0 0 10px rgba(13, 110, 253, 0.2);
+  }
+
+  /* Modern scrollbars */
+  .table-responsive::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+  }
+  .table-responsive::-webkit-scrollbar-thumb {
+    background: #6c757d;
+    border-radius: 10px;
+  }
+  .table-responsive::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+</style>
+{% endblock %}

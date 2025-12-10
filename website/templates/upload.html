@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Upload Data | Celestial Earth</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold" href="/">
+        <i class="fa-solid fa-earth-americas me-2"></i>Celestial Earth
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link active" aria-current="page" href="/">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/model">Model</a></li>
+          <li class="nav-item"><a class="nav-link" href="/upload">Upload Data</a></li>
+          <li class="nav-item"><a class="nav-link" href="/results">Results</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-5">
+    <h2>Upload Your Network Data</h2>
+    <form id="upload-form" method="POST" action="/upload_files" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label class="form-label" for="buses">Buses CSV</label>
+        <input class="form-control" type="file" name="buses" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="lines">Lines CSV</label>
+        <input class="form-control" type="file" name="lines" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="carriers">Carriers CSV</label>
+        <input class="form-control" type="file" name="carriers" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="generators">Generators CSV</label>
+        <input class="form-control" type="file" name="generators" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="snapshots">Snapshots CSV</label>
+        <input class="form-control" type="file" name="snapshots" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="loads">Loads CSV</label>
+        <input class="form-control" type="file" name="loads" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="storage_units">Storage Units CSV</label>
+        <input class="form-control" type="file" name="storage_units" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="transformers">Transformers CSV</label>
+        <input class="form-control" type="file" name="transformers" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="transformer_types">Transformer Types CSV</label>
+        <input class="form-control" type="file" name="transformer_types" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
